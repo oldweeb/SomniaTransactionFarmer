@@ -97,3 +97,9 @@ tran_count = 5
 stt_send = true
 ping_pong_swap = false
 ```
+
+## 📝 TODO
+
+- [ ] Implement PING/PONG token swap logic
+- [ ] Implement STT token transfers to Somnia team addresses
+- [ ] Implement other swaps, like QuickSwap
