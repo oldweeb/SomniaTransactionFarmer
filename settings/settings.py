@@ -1,0 +1,25 @@
+from dataclasses import dataclass
+from typing import Optional
+
+
+@dataclass
+class ApiSettings:
+    rpc_url: str
+    proxy: Optional[str] = None
+    gas_price: Optional[int] = None
+
+@dataclass
+class AccountSettings:
+    private_key: str
+    tran_count: int
+
+@dataclass
+class FarmSettings:
+    stt_send: bool
+    ping_pong_swap: bool
+
+@dataclass
+class Settings:
+    api: ApiSettings
+    account: AccountSettings
+    farm: FarmSettings

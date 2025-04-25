@@ -1,0 +1,12 @@
+[api]
+rpc_url = ''
+proxy = ''
+gas_price = 0
+
+[account]
+private_key = ''
+tran_count = 10
+
+[farm]
+stt_send = true
+ping_pong_swap = true
