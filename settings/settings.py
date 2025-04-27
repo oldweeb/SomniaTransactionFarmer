@@ -19,7 +19,15 @@ class FarmSettings:
     ping_pong_swap: bool
 
 @dataclass
+class PingPongSettings:
+    router_contract: str
+    ping_contract: str
+    pong_contract: str
+    router_abi: str
+
+@dataclass
 class Settings:
     api: ApiSettings
     account: AccountSettings
     farm: FarmSettings
+    ping_pong: Optional[PingPongSettings] = None

@@ -12,6 +12,7 @@ A simple automation script to interact with the **Somnia testnet**, allowing for
 - `pip` or `pipenv` for managing dependencies
 - A funded **testnet wallet** (with STT and tokens like PING/PONG)
 - Access to the **Somnia RPC endpoint**
+- Minimum balance of 0.3 STT
 
 Install dependencies:
 
@@ -81,6 +82,19 @@ python main.py --config ./settings/example.toml
 
 ---
 
+### `ping_pong` (PingPongSettings) (Optional)
+
+| Property          | Type     | Required | Description                              |
+|-------------------|----------|----------|------------------------------------------|
+| `router_contract` | `str`    | ✅ Yes (if using ping/pong) | Router contract address                 |
+| `ping_contract`   | `str`    | ✅ Yes (if using ping/pong) | "PING" token contract address            |
+| `pong_contract`   | `str`    | ✅ Yes (if using ping/pong) | "PONG" token contract address            |
+| `router_abi`      | `str`    | ✅ Yes (if using ping/pong) | ABI (JSON string) for the router contract |
+
+> ℹ️ **Note:** The `ping_pong` block is optional unless `ping_pong_swap = true`.
+
+---
+
 ## 🧪 Example Config (`example.toml`)
 
 ```toml
@@ -95,11 +109,17 @@ tran_count = 5
 
 [farm]
 stt_send = true
-ping_pong_swap = false
+ping_pong_swap = true
+
+[ping_pong]
+router_contract = "0xRouterContractAddress"
+ping_contract = "0xPingTokenAddress"
+pong_contract = "0xPongTokenAddress"
+router_abi = '[{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"type":"function"}]'
 ```
 
 ## 📝 TODO
 
-- [ ] Implement PING/PONG token swap logic
+- [x] Implement PING/PONG token swap logic
 - [ ] Implement STT token transfers to Somnia team addresses
 - [ ] Implement other swaps, like QuickSwap

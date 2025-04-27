@@ -8,8 +8,9 @@ from eth_account.signers.local import LocalAccount
 from web3 import Web3
 
 from logger.logger import logger
-from settings.settings import Settings, ApiSettings, AccountSettings, FarmSettings
+from settings.settings import Settings, ApiSettings, AccountSettings, FarmSettings, PingPongSettings
 from tran_generation.send_stt import send_stt_multiple
+from tran_generation.swap_ping_pong import swap_ping_pong_multiple
 
 BALANCE_THRESHOLD = 0.3
 
@@ -48,6 +49,10 @@ def start() -> None:
 
     if settings.farm.stt_send:
         send_stt_multiple(account, web3, settings.account.tran_count, settings.api.gas_price)
+
+    if settings.farm.ping_pong_swap:
+        settings.ping_pong = PingPongSettings(**config_file['ping_pong'])
+        swap_ping_pong_multiple(account, web3, settings.ping_pong, settings.account.tran_count)
 
 
 if __name__ == '__main__':

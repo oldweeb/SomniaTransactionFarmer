@@ -1,2 +1,5 @@
 toml==0.10.2
 web3==7.10.0
+
+eth-account~=0.13.7
+requests~=2.32.3

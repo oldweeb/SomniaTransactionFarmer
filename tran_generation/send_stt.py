@@ -4,7 +4,7 @@ from eth_account.signers.local import LocalAccount
 from web3 import Web3
 
 from logger.logger import logger
-from utils.web3 import get_random_evm_address
+from utils.web3_utils import get_random_evm_address, get_txn_status_formatted
 
 CHAIN_ID = 50312
 
@@ -42,7 +42,4 @@ def send_stt(account: LocalAccount, web3: Web3, nonce: int, gas_price: int) -> N
     tx_hash = web3.eth.send_raw_transaction(signed_txn.raw_transaction)
     logger.info(f'Transaction hash: 0x{tx_hash.hex()}')
     receipt = web3.eth.wait_for_transaction_receipt(tx_hash, timeout=15)
-    if receipt['status']:
-        logger.info(f'Transaction 0x{tx_hash.hex()} was successful')
-    else:
-        logger(f'Transaction was 0x{tx_hash.hex()} failed')
+    logger.info(f'Transaction 0x{tx_hash.hex()} was {get_txn_status_formatted(receipt).value}')
