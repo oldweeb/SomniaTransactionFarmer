@@ -24,5 +24,9 @@ def get_erc20_token_balance(account: LocalAccount, token: Contract) -> (int, int
     token_decimals = token.functions.decimals().call()
     return token_balance, token_decimals
 
-def get_txn_status_formatted(receipt: TxReceipt) -> TxStatusFormatted:
-    return TxStatusFormatted.Successful if receipt['status'] else TxStatusFormatted.Failed
+def get_erc20_token_balance_readable(account: LocalAccount, token: Contract) -> float:
+    token_balance, token_decimals = get_erc20_token_balance(account, token)
+    return token_balance / (10 ** token_decimals)
+
+def get_txn_status_formatted(receipt: TxReceipt) -> str:
+    return TxStatusFormatted.Successful.value[0] if receipt['status'] else TxStatusFormatted.Failed.value[0]

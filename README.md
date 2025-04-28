@@ -2,7 +2,8 @@
 
 A simple automation script to interact with the **Somnia testnet**, allowing for:
 - Sending STT to random addresses
-- Performing PING/PONG token swaps (Currently unavailable)
+- Performing PING/PONG token swaps
+- Performing QuickSwap token swaps between STT, WSTT, and USDC
 
 ---
 
@@ -75,10 +76,11 @@ python main.py --config ./settings/example.toml
 
 ### `farm` (FarmSettings)
 
-| Property         | Type      | Required | Description                                 |
-|------------------|-----------|----------|---------------------------------------------|
-| `stt_send`       | `bool`    | ✅ Yes   | Enable sending STT to random addresses      |
-| `ping_pong_swap` | `bool`    | ✅ Yes   | Enable PING/PONG token swap functionality   |
+| Property         | Type   | Required | Description                               |
+|------------------|--------|---------|-------------------------------------------|
+| `stt_send`       | `bool` | ✅ Yes   | Enable sending STT to random addresses    |
+| `ping_pong_swap` | `bool` | ✅ Yes   | Enable PING/PONG token swap functionality |
+| `quick_swap`     | `bool` | ✅ Yes   | Enable QuickSwap functionality             |
 
 ---
 
@@ -92,6 +94,17 @@ python main.py --config ./settings/example.toml
 | `router_abi`      | `str`    | ✅ Yes (if using ping/pong) | ABI (JSON string) for the router contract |
 
 > ℹ️ **Note:** The `ping_pong` block is optional unless `ping_pong_swap = true`.
+
+---
+
+### `quick_swap` (QuickSwapDexSettings) (Optional)
+
+| Property             | Type     | Required | Description                         |
+|----------------------|----------|----------|-------------------------------------|
+| `router_contract`    | `str`    | ✅ Yes   | Router contract address             |
+| `router_abi`         | `str`    | ✅ Yes   | Router ABI JSON string              |
+| `usdc_contract`      | `str`    | ✅ Yes   | USDC token contract address         |
+| `wstt_contract`      | `str`    | ✅ Yes   | WSTT (wrapped STT) token contract    |
 
 ---
 
@@ -111,15 +124,23 @@ tran_count = 5
 stt_send = true
 ping_pong_swap = true
 
+
 [ping_pong]
 router_contract = "0xRouterContractAddress"
 ping_contract = "0xPingTokenAddress"
 pong_contract = "0xPongTokenAddress"
 router_abi = '[{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"type":"function"}]'
+
+[quick_swap]
+router_contract = '0xE94de02e52Eaf9F0f6Bf7f16E4927FcBc2c09bC7'
+router_abi = '[{"inputs":[{"components":[{"internalType":"address","name":"tokenIn","type":"address"},{"internalType":"address","name":"tokenOut","type":"address"},{"internalType":"address","name":"deployer","type":"address"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"amountOutMinimum","type":"uint256"},{"internalType":"uint160","name":"limitSqrtPrice","type":"uint160"}],"internalType":"struct ISwapRouter.ExactInputSingleParams","name":"params","type":"tuple"}],"name":"exactInputSingle","outputs":[{"internalType":"uint256","name":"amountOut","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amountMinimum","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"}],"name":"unwrapWNativeToken","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes[]","name":"data","type":"bytes[]"}],"name":"multicall","outputs":[{"internalType":"bytes[]","name":"results","type":"bytes[]"}],"stateMutability":"payable","type":"function"}]'
+usdc_contract = '0xE9CC37904875B459Fa5D0FE37680d36F1ED55e38'
+wstt_contract = '0x4A3BC48C156384f9564Fd65A53a2f3D534D8f2b7'
 ```
 
 ## 📝 TODO
 
 - [x] Implement PING/PONG token swap logic
 - [ ] Implement STT token transfers to Somnia team addresses
-- [ ] Implement other swaps, like QuickSwap
+- [x] Implement other swaps, like QuickSwap
+- [ ] Implement slippage protection on swaps

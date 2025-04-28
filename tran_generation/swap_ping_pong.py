@@ -7,7 +7,8 @@ from web3.contract import Contract
 
 from logger.logger import logger
 from settings.settings import PingPongSettings
-from utils.web3_utils import get_erc20_token_balance, get_erc20_token_contract, get_txn_status_formatted
+from utils.web3_utils import get_erc20_token_balance, get_erc20_token_contract, get_txn_status_formatted, \
+    get_erc20_token_balance_readable
 
 CHAIN_ID = 50312
 
@@ -36,8 +37,8 @@ def swap_ping_pong(account: LocalAccount, web3: Web3, settings: PingPongSettings
     ping_balance, ping_decimals = get_erc20_token_balance(account, ping_token)
     pong_balance, pong_decimals = get_erc20_token_balance(account, pong_token)
 
-    ping_human = ping_balance / 10 ** ping_decimals
-    pong_human = pong_balance / 10 ** pong_decimals
+    ping_human = get_erc20_token_balance_readable(account, ping_token)
+    pong_human = get_erc20_token_balance_readable(account, pong_token)
 
     logger.info(f'Ping balance: {ping_human:.6f} | Pong balance: {pong_human:.6f}')
 
@@ -46,10 +47,10 @@ def swap_ping_pong(account: LocalAccount, web3: Web3, settings: PingPongSettings
     token_in = settings.ping_contract if swap_ping_to_pong else settings.pong_contract
     token_out = settings.pong_contract if swap_ping_to_pong else settings.ping_contract
     decimals = ping_decimals if swap_ping_to_pong else pong_decimals
-    balance = ping_balance if swap_ping_to_pong else pong_balance
+    balance = ping_human if swap_ping_to_pong else pong_human
 
     # Swap half of balance, randomly from 1 to half
-    max_swap_human = balance // (2 * 10 ** decimals)
+    max_swap_human = int(balance // 2)
     if max_swap_human == 0:
         logger.warning("Not enough balance to swap.")
         return
@@ -93,4 +94,4 @@ def swap_ping_pong(account: LocalAccount, web3: Web3, settings: PingPongSettings
 
     logger.info(f"Swap transaction sent. Tx Hash: 0x{tx_hash.hex()}")
     receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
-    logger.info(f'Transaction was {get_txn_status_formatted(receipt).value}')
+    logger.info(f'Transaction was {get_txn_status_formatted(receipt)}')

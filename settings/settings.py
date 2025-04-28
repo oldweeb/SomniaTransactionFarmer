@@ -17,6 +17,7 @@ class AccountSettings:
 class FarmSettings:
     stt_send: bool
     ping_pong_swap: bool
+    quick_swap: bool
 
 @dataclass
 class PingPongSettings:
@@ -26,8 +27,16 @@ class PingPongSettings:
     router_abi: str
 
 @dataclass
+class QuickSwapDexSettings:
+    router_contract: str
+    router_abi: str
+    usdc_contract: str
+    wstt_contract: str
+
+@dataclass
 class Settings:
     api: ApiSettings
     account: AccountSettings
     farm: FarmSettings
     ping_pong: Optional[PingPongSettings] = None
+    quick_swap: Optional[QuickSwapDexSettings] = None

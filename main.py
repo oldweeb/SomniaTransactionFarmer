@@ -8,7 +8,9 @@ from eth_account.signers.local import LocalAccount
 from web3 import Web3
 
 from logger.logger import logger
-from settings.settings import Settings, ApiSettings, AccountSettings, FarmSettings, PingPongSettings
+from settings.settings import Settings, ApiSettings, AccountSettings, FarmSettings, PingPongSettings, \
+    QuickSwapDexSettings
+from tran_generation.quick_swap import quick_swap
 from tran_generation.send_stt import send_stt_multiple
 from tran_generation.swap_ping_pong import swap_ping_pong_multiple
 
@@ -53,6 +55,10 @@ def start() -> None:
     if settings.farm.ping_pong_swap:
         settings.ping_pong = PingPongSettings(**config_file['ping_pong'])
         swap_ping_pong_multiple(account, web3, settings.ping_pong, settings.account.tran_count)
+
+    if settings.farm.quick_swap:
+        settings.quick_swap = QuickSwapDexSettings(**config_file['quick_swap'])
+        quick_swap(account, web3, settings.quick_swap, settings.account.tran_count)
 
 
 if __name__ == '__main__':
